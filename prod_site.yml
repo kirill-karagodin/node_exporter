@@ -41,6 +41,6 @@
         mode: 0755
     - name: Run script
       become: true
-      script:
+      shell:
         cmd: "./tmp/helm-prod.sh"
-      remote_src: yes
+
