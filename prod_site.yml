@@ -45,5 +45,5 @@
       become: true
       shell:
         cmd: "./helm-prod.sh"
-        chdir: {{ helm_dir }}
+        chdir: "{{ helm_dir }}"
 
