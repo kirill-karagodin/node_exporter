@@ -30,7 +30,7 @@
     - name: Copy Helm binaries
       become: true
       copy:
-        src: "/tmp/helm-v{{ helm_version }}/linux-amd64/helm"
+        src: "/tmp/helm-v{{ helm_version }}/helm"
         dest: "/usr/local/bin/helm"
         mode: 0775
         remote_src: yes
