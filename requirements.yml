@@ -4,6 +4,6 @@
   scm: git
   version: "2.0.0"
 - name: helm_role
-  src: git@github.com:gantsign/ansible_role_helm.git
+  src: git@github.com:Flaconi/ansible-role-helm.git
   scm: git
-  version: "2.12.0"
+  version: "1.0.0"
