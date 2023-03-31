@@ -1,0 +1,135 @@
+---
+
+- name: Add default repositories
+  command: |
+    helm repo add
+      {% if helm_kubectl_context is defined and helm_kubectl_context %}
+      --kube-context {{ helm_kubectl_context }}
+      {% endif %}
+      stable https://charts.helm.sh/stable
+  check_mode: False
+- name: Get Helm repositories
+  command: |
+    helm repo list
+      {% if helm_kubectl_context is defined and helm_kubectl_context %}
+      --kube-context {{ helm_kubectl_context }}
+      {% endif %}
+  register: _get_repositories_command
+  check_mode: False
+  changed_when: False
+
+- name: Parse all Helm repositories
+  parse_helm_repositories:
+    helm_output: "{{ _get_repositories_command.stdout }}"
+  register: _get_repositories
+  check_mode: False
+
+- name: Add new repositories
+  command: |
+    helm repo add
+      {% if helm_kubectl_context is defined and helm_kubectl_context %}
+      --kube-context {{ helm_kubectl_context }}
+      {% endif %}
+      {{ item.name }} {{ item.url }}
+  with_items: "{{ helm_repositories }}"
+  check_mode: False
+  when: item.name not in _get_repositories.repository_names
+
+- name: Get the latest list of charts
+  command: |
+    helm repo update
+      {% if helm_kubectl_context is defined and helm_kubectl_context %}
+      --kube-context {{ helm_kubectl_context }}
+      {% endif %}
+  check_mode: False
+  changed_when: False
+
+- name: Get all Helm releases
+  command: |
+    helm list
+      {% if helm_kubectl_context is defined and helm_kubectl_context %}
+      --kube-context {{ helm_kubectl_context }}
+      {% endif %}
+      --all-namespaces
+      --output yaml
+  register: _get_releases_command
+  check_mode: False
+  changed_when: False
+
+- name: Parse all Helm releases
+  set_fact:
+    # Resource: https://stackoverflow.com/a/39852380
+    helm_raw_releases: "{{ _get_releases_command.stdout | from_yaml }}"
+
+- name: Get array of release names
+  set_fact:
+    helm_release_names: >-
+      {%- if helm_raw_releases is defined and helm_raw_releases|length -%}
+      {{ helm_raw_releases | map(attribute='name') | list }}
+      {%- else -%}
+      {{ [] }}
+      {%- endif %}
+
+- set_fact:
+    helm_vpc_id: []
+    helm_ec2_security_groups: []
+    helm_charts_updated: []
+
+- include_tasks: gather_facts_vpc.yml
+  when: inventory_hostname != "localhost"
+- include_tasks: gather_facts_security_groups.yml
+  when: inventory_hostname != "localhost"
+
+- name: Assign Security Groups to Charts
+  set_fact:
+    charts_place_holder:
+      release: "{{ chart }}"
+      chart: "{{ item.chart }}"
+      chart_version: "{{ item.chart_version }}"
+      values_file_path: "{{ item.values_file_path }}"
+      namespace: "{{ item.namespace }}"
+      security_groups: "{{ helm_ec2_security_groups[chart].Groups | default([]) }}"
+  with_items: "{{ helm_charts }}"
+  vars:
+    chart: "{{ item.release }}"
+  when: inventory_hostname != "localhost"
+  register: _charts_place_holder_result
+
+- name: Render Helm Charts with SG
+  set_fact:
+    helm_charts_updated: "{{ _charts_place_holder_result |
+    json_query('results[*].ansible_facts.charts_place_holder') }}"
+  when: inventory_hostname != "localhost"
+
+- name: Create temporary files to store the rendered template
+  tempfile:
+    state: file
+  register: rendered_template
+  with_items: "{% if inventory_hostname == 'localhost' %}{{ helm_charts }}
+  {% else %}{{ helm_charts_updated }}{% endif %}"
+  check_mode: False
+  changed_when: False
+
+- name: Render templates
+  template:
+    src: "{{ helm_configuration_files }}/{{ item.item.values_file_path }}"
+    dest: "{{ item.path }}"
+    mode: '0400'
+  with_items: "{{ rendered_template.results }}"
+  check_mode: False
+  changed_when: False
+
+###
+### Split between normal run and dry run
+###
+- include_tasks: run-normal.yml
+  # Run without --check mode
+  vars:
+    helm_charts: "{{ rendered_template.results }}"
+  when: ansible_check_mode == False
+
+- include_tasks: run-dry.yml
+  # Run only in --check mode
+  vars:
+    helm_charts: "{{ rendered_template.results }}"
+  when: ansible_check_mode == True

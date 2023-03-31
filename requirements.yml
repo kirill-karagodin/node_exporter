@@ -6,4 +6,4 @@
 - name: helm_role
   src: git@github.com:Flaconi/ansible-role-helm.git
   scm: git
-  version: "1.0.0"
+  version: "v1.0.0"
