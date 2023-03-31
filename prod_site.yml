@@ -4,6 +4,8 @@
   roles:
     - node_exporter_role
 - name: Install node_exporter for K8S nodes (PROD)
+  vars:
+    helm_vehsion: "3.6.0"
   become: true
   hosts: cp1
   tasks:
