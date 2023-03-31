@@ -1,0 +1,54 @@
+---
+# All host
+all:
+  all:
+  hosts:
+    jenkins-master-01:
+      ansible_host: 10.200.80.4
+    jenkins-agent-stage:
+      ansible_host: 10.200.80.6
+    jenkins-agent-prod:
+      ansible_host: 10.200.80.5
+    grafana-master-01:
+      ansible_host: 10.200.80.7
+    nginx-bl:
+      ansible_host: 10.200.80.3
+    cp1:
+      ansible_host: 10.200.110.11
+    node1:
+      ansible_host: 10.200.110.12
+    node2:
+      ansible_host: 10.200.110.13
+    stage-cp1:
+      ansible_host: 10.200.100.11
+    stage-node1:
+      ansible_host: 10.200.100.12
+    stage-node2:
+      ansible_host: 10.200.100.13
+  children:
+    prod:
+      children:
+        prod-host:
+          hosts:
+            cp1:
+            node1:
+            node2:
+    stage:
+      children:
+        stage-host:
+          hosts:
+            stage-cp1:
+            stage-node1:
+            stage-node2:
+    infra:
+      children:
+        infra-host:
+          hosts:
+            jenkins-master-01:
+            jenkins-agent-stage:
+            jenkins-agent-prod:
+            grafana-master-01:
+            nginx-bl:
+    vars:
+      ansible_connection_type: paramiko
+      ansible_user: cloud-user

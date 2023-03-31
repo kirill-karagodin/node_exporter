@@ -1,0 +1,5 @@
+---
+- name: node_exporter_role
+  src: git@github.com:cloudalchemy/ansible-node-exporter.git
+  scm: git
+  version: "2.0.0"

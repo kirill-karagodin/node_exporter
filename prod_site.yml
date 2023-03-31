@@ -1,0 +1,21 @@
+---
+- name: Install node_exporter for infra nodes
+  hosts: infra-host
+  roles:
+    - node_exporter_role
+- name: Install node_exporter for K8S nodes (PROD)
+  hosts: prod-host
+  roles:
+    - node_exporter_role
+#- name: Copy config for "infra" nodes
+#  become: true
+#  template:
+#    src:
+#    dest:
+#  notyfy: Restart node exporter
+#- name: Copy config for K8S nodes (PROD)
+#  host: prod
+#  become: true
+#  template:
+#    src:
+#    dest:

@@ -1,0 +1,11 @@
+- name: Install node_exporter for K8S nodes (STAGE)
+  host: stage
+  roles:
+    - node_exporter_role
+#- name: Copy config for K8S nodes (STAGE)
+#  host: stage
+#  become: true
+#  template:
+#    src:
+#    dest:
+#  notyfy: Restart node exporter
