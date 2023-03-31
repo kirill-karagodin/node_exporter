@@ -28,12 +28,10 @@
     - name: Copy Helm binaries
       become: true
       copy:
-        src: "/tmp/helm-v{{ helm_verion }}/linux-amd64/{{ item }}"
-        dest: "/usr/local/bin/{{ item }}"
+        src: "/tmp/helm-v{{ helm_verion }}/linux-amd64/helm"
+        dest: "/usr/local/bin/helm"
         mode: 0775
         remote_src: yes
-      with_items:
-        - "helm"
     - name: Copy bash file
       become: true
       copy:
