@@ -1,11 +1,22 @@
+---
 - name: Install node_exporter for K8S nodes (STAGE)
-  host: stage-host
-  roles:
-    - node_exporter_role
-#- name: Copy config for K8S nodes (STAGE)
-#  host: stage
-#  become: true
-#  template:
-#    src:
-#    dest:
-#  notyfy: Restart node exporter
+  become: true
+  hosts: cp1
+  tasks:
+    - name: Install HELM (STAGE)
+      become: true
+        roles:
+          - helm_role
+    - name: Install node_exporter helm-chart
+      become: true
+         tasks:
+           - name: Copy bash file
+             copy:
+               src: "files/helm-stage.sh"
+               dest: "/tmp"
+               remote_src: yes
+               mode: 0755
+           - name: Run script
+             script:
+               cmd: /tmp/helm-prod.sh
+               remote_src: yes
