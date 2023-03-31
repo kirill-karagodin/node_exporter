@@ -8,6 +8,7 @@
   hosts: cp1
   vars:
     helm_version: "3.6.0"
+    helm_dir: "/tmp"
   tasks:
     - name: Download HELM (PROD)
       become: true
@@ -22,15 +23,15 @@
     - name: Unpack helm
       become: true
       unarchive:
-        src: "/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz"
+        src: "{{ helm_dir }}/helm-v{{ helm_version }}-linux-amd64.tar.gz"
         dest: "/tmp"
-        creates: "/tmp/helm-v{{ helm_version }}"
+        creates: "{{ helm_dir }}/helm-v{{ helm_version }}"
         remote_src: yes
       check_mode: false
     - name: Copy Helm binaries
       become: true
       copy:
-        src: "/tmp/helm-v{{ helm_version }}/helm"
+        src: "{{ helm_dir }}/linux-amd64/helm"
         dest: "/usr/local/bin/helm"
         mode: 0775
         remote_src: yes
@@ -38,7 +39,7 @@
       become: true
       copy:
         src: "files/helm-prod.sh"
-        dest: "/tmp"
+        dest: "{{ helm_dir }}"
         mode: 0755
     - name: Run script
       become: true
