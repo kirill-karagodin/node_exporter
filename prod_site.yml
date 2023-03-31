@@ -18,8 +18,8 @@
         dest: "/tmp"
       remote_src: yes
       mode: 0755
-    - name: Run script
-      become: true
-      script:
-        cmd: "./tmp/helm-prod.sh"
-      remote_src: yes
+#    - name: Run script
+#      become: true
+#      script:
+#        cmd: "./tmp/helm-prod.sh"
+#      remote_src: yes
