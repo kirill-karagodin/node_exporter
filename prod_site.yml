@@ -17,7 +17,7 @@
       retries: 5
       delay: 2
       check_mode: false
-    - name: Unpack helm-v{{ helm_verion }}
+    - name: Unpack helm
       become: true
       unarchive:
         src: "/tmp/helm-v{{ helm_verion }}-linux-amd64.tar.gz"
