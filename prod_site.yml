@@ -4,16 +4,14 @@
   roles:
     - node_exporter_role
 - name: Install node_exporter for K8S nodes (PROD)
-  vars:
-    helm_vehsion: "3.6.0"
   become: true
   hosts: cp1
   tasks:
     - name: Download HELM (PROD)
       become: true
       get_url:
-        url: "https://get.helm.sh/helm-v{{ helm_verion }}-linux-amd64.tar.gz"
-        dest: "/tmp/helm-v{{ helm_verion }}-linux-amd64.tar.gz"
+        url: "https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz"
+        dest: "/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz"
         remote_src: yes
       register: _download_archive
       until: _download_archive is succeeded
@@ -23,15 +21,15 @@
     - name: Unpack helm
       become: true
       unarchive:
-        src: "/tmp/helm-v{{ helm_verion }}-linux-amd64.tar.gz"
+        src: "/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz"
         dest: "/tmp"
-        creates: "/tmp/helm-v{{ helm_verion }}"
+        creates: "/tmp/helm-v{{ helm_version }}"
         remote_src: yes
       check_mode: false
     - name: Copy Helm binaries
       become: true
       copy:
-        src: "/tmp/helm-v{{ helm_verion }}/linux-amd64/helm"
+        src: "/tmp/helm-v{{ helm_version }}/linux-amd64/helm"
         dest: "/usr/local/bin/helm"
         mode: 0775
         remote_src: yes
