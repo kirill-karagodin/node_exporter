@@ -14,7 +14,6 @@
       get_url:
         url: "https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz"
         dest: "/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz"
-        remote_src: yes
       register: _download_archive
       until: _download_archive is succeeded
       retries: 5
