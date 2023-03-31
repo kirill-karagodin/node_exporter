@@ -24,7 +24,6 @@
         dest: "/tmp"
         creates: "/tmp/helm-v{{ helm_verion }}"
       check_mode: false
-      remote_src: yes
     - name: Copy Helm binaries
       become: true
       copy:
