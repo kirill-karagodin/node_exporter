@@ -9,8 +9,8 @@
   tasks:
     - name: Install HELM (PROD)
       become: true
-        roles:
-          - helm_role
+      roles:
+        - helm_role
     - name: Install node_exporter helm-chart
       become: true
          tasks:
