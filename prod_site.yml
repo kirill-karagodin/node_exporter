@@ -25,7 +25,6 @@
         src: "/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz"
         dest: "/tmp"
         creates: "/tmp/helm-v{{ helm_version }}"
-        remote_src: yes
       check_mode: false
     - name: Copy Helm binaries
       become: true
