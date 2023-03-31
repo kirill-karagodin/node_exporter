@@ -36,6 +36,8 @@
       copy:
         src: "files/helm-prod.sh"
         dest: "/tmp"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
       mode: 0755
     - name: Run script
       become: true
