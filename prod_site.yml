@@ -46,4 +46,4 @@
       shell:
         cmd: "./helm-prod.sh"
         chdir: "{{ helm_dir }}"
-
+        remote_src: yes
