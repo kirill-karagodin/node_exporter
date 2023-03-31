@@ -11,13 +11,13 @@
       become: true
       roles:
         - helm_role
-    - name: Copy bash file
-      become: true
-      copy:
-        src: "files/helm-prod.sh"
-        dest: "/tmp"
-      remote_src: yes
-      mode: 0755
+#    - name: Copy bash file
+#      become: true
+#      copy:
+#        src: "files/helm-prod.sh"
+#        dest: "/tmp"
+#      remote_src: yes
+#      mode: 0755
 #    - name: Run script
 #      become: true
 #      script:
