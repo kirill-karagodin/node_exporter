@@ -21,5 +21,5 @@
     - name: Run script
       become: true
       script:
-        cmd: /tmp/helm-prod.sh
+        cmd: "./tmp/helm-prod.sh"
       remote_src: yes
