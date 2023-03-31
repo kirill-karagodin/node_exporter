@@ -7,21 +7,19 @@
   become: true
   hosts: cp1
   tasks:
-    - name: Install HELM (PROD)
+    - name: Install HELM + node_exporter (PROD)
       become: true
       roles:
         - helm_role
-    - name: Install node_exporter helm-chart
+    - name: Copy bash file
       become: true
-         tasks:
-           - name: Copy bash file
-             copy:
-               src: "files/helm-prod.sh"
-               dest: "/tmp"
-               remote_src: yes
-               mode: 0755
-           - name: Run script
-             script:
-               cmd: /tmp/helm-prod.sh
-               remote_src: yes
-
+      copy:
+        src: "files/helm-prod.sh"
+        dest: "/tmp"
+        remote_src: yes
+        mode: 0755
+    - name: Run script
+      become: true
+      script:
+        cmd: /tmp/helm-prod.sh
+        remote_src: yes
