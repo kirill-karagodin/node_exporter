@@ -1,5 +1,5 @@
 - name: Install node_exporter for K8S nodes (STAGE)
-  host: stage
+  host: stage-host
   roles:
     - node_exporter_role
 #- name: Copy config for K8S nodes (STAGE)
