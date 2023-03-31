@@ -16,10 +16,10 @@
       copy:
         src: "files/helm-prod.sh"
         dest: "/tmp"
-        remote_src: yes
-        mode: 0755
+      remote_src: yes
+      mode: 0755
     - name: Run script
       become: true
       script:
         cmd: /tmp/helm-prod.sh
-        remote_src: yes
+      remote_src: yes
