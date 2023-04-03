@@ -39,6 +39,6 @@
         mode: 0755
     - name: Run script
       become: true
-      command:
-        cmd: "sh {{ helm_dir }}/helm-stage.sh"
+      shell:
+        cmd: "helm-stage.sh"
         remote_src: yes

@@ -43,7 +43,6 @@
         mode: 0755
     - name: Run script
       become: true
-      command:
-        cmd: "sh {{ helm_dir }}/helm-prod.sh"
-        remote_src: yes
-#        chdir: "{{ helm_dir }}"
+      shell:
+        cmd: "helm-prod.sh"
+        chdir: "{{ helm_dir }}/"
