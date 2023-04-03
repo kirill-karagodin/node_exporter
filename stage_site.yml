@@ -1,7 +1,7 @@
 ---
 - name: Install node_exporter for K8S nodes (STAGE)
   become: true
-  hosts: cp1
+  hosts: stage-cp1
   vars:
     helm_version: "3.6.0"
     helm_dir: "/tmp"
