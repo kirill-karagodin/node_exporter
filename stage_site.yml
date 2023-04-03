@@ -34,7 +34,7 @@
     - name: Copy bash file
       become: true
       copy:
-        src: "files/helm-prod.sh"
+        src: "files/helm-stage.sh"
         dest: "{{ helm_dir }}"
         mode: 0755
     - name: Run script
