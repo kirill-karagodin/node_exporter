@@ -45,4 +45,4 @@
       become: true
       command: chdir={{ helm_dir }} ./helm-prod.sh
       environment:
-        PATH: /bin/bash
+        PATH: /home/cloud-user/.local/bin:/home/cloud-user/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
