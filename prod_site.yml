@@ -43,7 +43,7 @@
         mode: 0755
     - name: Run script
       become: true
-      shell:
-        cmd: "cd {{ helm_dir }}"
-        cmd: "sh ./helm-prod.sh"
+      shell: |
+        cd {{ helm_dir }}
+        sh ./helm-prod.sh
 #        chdir: "{{ helm_dir }}/"
