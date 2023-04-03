@@ -44,5 +44,5 @@
     - name: Run script
       become: true
       shell:
-        cmd: "{{ helm_dir }}/helm-prod.sh"
+        cmd: "sh {{ helm_dir }}/.helm-prod.sh"
 #        chdir: "{{ helm_dir }}/"
